@@ -1,7 +1,7 @@
 # Em operations.py
 
-import pandas as pd
-import numpy as np
+import pandas as pd  # type: ignore
+import numpy as np   # type: ignore
 
 class Operations:
     def __init__(self, csvPathFile : str, dataFrame : pd.DataFrame):

@@ -1,9 +1,11 @@
-import pandas as pd
-import numpy as np
+import pandas as pd    # type: ignore
+import numpy as np     # type: ignore
 
-from core import analiseProdutos as ap
-from operations import operations as op
-from operations import plotGraphics as pg
+from core import dataProcessing as dtPr
+from core import dataOperations as dtOp
+from core import dataVisualization as dtVi
+
+from utility import consoleUI as ui
 
 FILEPATH = '../Data/AllSells.csv'
 
@@ -18,8 +20,8 @@ def generateDataFrame(filePath : str):
 def startMenu(dataFrame : pd.DataFrame):
     printHead()
 
-    myOp = op.Operations(FILEPATH, dataFrame)
-    myAp = ap.aProdutos()
+    myOp = dtOp.Operations(FILEPATH, dataFrame)
+    myAp = dtPr.aProdutos()
 
     while(True):
 
@@ -35,7 +37,7 @@ def startMenu(dataFrame : pd.DataFrame):
                 topFiveProdutosVolume.sort_values(inplace=True)
                 xAxisLabel = topFiveProdutosVolume.index.astype(str)
                 yAxisLabel = topFiveProdutosVolume.values
-                pg.plotPD.plotTopObjs(xAxisLabel, yAxisLabel, "Produto", "Quantidade")
+                dtVi.plotPD.plotTopObjs(xAxisLabel, yAxisLabel, "Produto", "Quantidade")
             case '2':
                 myOp.printColumnsNames()
             case '0':
@@ -51,7 +53,7 @@ def startMenu(dataFrame : pd.DataFrame):
 if __name__ == "__main__":
     myDF = generateDataFrame(FILEPATH)
     startMenu(myDF)
-    print(np.array(myDF.columns))
+    
 
 
 
