@@ -7,52 +7,41 @@ from core import dataVisualization as dtVi
 
 from utility import consoleUI as ui
 
+# Implementar o seletor de arquivos
 FILEPATH = '../Data/AllSells.csv'
 
-def printHead():
-    print("\n\n|  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *\n\n")
 
+def startMenu():
 
-def generateDataFrame(filePath : str):
+    mydtPr = dtPr.dataProcessing()
+    mydtOp = dtOp.dataOperations(FILEPATH, mydtPr.generateDataFrameFromCSV(FILEPATH))
+    mydtOp.precoLimpo()
 
-    return pd.read_csv(filePath)
-
-def startMenu(dataFrame : pd.DataFrame):
-    printHead()
-
-    myOp = dtOp.Operations(FILEPATH, dataFrame)
-    myAp = dtPr.aProdutos()
+    ui.printLogo()
 
     while(True):
 
-        printHead()
-        print("| ( 1 ) - Plotar um Gráfico: ")
-        print("| ( 2 ) - Lista Opção de plotagem: ")
-        print("| ( 0 ) - Terminar Execução")
+        ui.printStartMenu()
 
         userInput = str(input("| Escolha: "))
         match userInput:
             case '1':
-                topFiveProdutosVolume = myAp.getTopProdutos(myOp.dataFrame, 'id_produto', 'quantidade', 5)
-                topFiveProdutosVolume.sort_values(inplace=True)
-                xAxisLabel = topFiveProdutosVolume.index.astype(str)
-                yAxisLabel = topFiveProdutosVolume.values
-                dtVi.plotPD.plotTopObjs(xAxisLabel, yAxisLabel, "Produto", "Quantidade")
+                ui.printHead()
+                mydtOp.createCustomGrupby()
+                
             case '2':
-                myOp.printColumnsNames()
+                ui.printHead()
+                mydtOp.printColumnsNames()
+                
             case '0':
-                printHead()
-                print("| Terminando...")
-                printHead()
+                ui.printExit()
                 return
+            
             case _:
-                print("| Opção Inválida ")
-
-        printHead()
+                print("| Opção Inválida! ")
 
 if __name__ == "__main__":
-    myDF = generateDataFrame(FILEPATH)
-    startMenu(myDF)
+    startMenu()
     
 
 
