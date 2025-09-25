@@ -1,10 +1,9 @@
-# Em operations.py
-
 import pandas as pd  # type: ignore
 import numpy as np   # type: ignore
 
 from core import dataProcessing as dtPr
 from core import dataVisualization as dtVi
+
 class dataOperations:
     
     def __init__(self, csvPathFile : str, dataFrame : pd.DataFrame):
@@ -82,17 +81,14 @@ class dataOperations:
         print(f"\n| Seleção: Agrupar por '{xAxis}' e analisar '{yAxis}'")
         mySeriesGrupBy = mydtPr.getTopProdutos(self.dataFrame, xAxis, yAxis, 5)
                 
-        x = mySeriesGrupBy.astype(str).sort_index()
-        
         print("\n| SELECIONAR O TIPO DO GRÁFICO \n")
         graphicType = str(input("| Escolha 1 ou 2"))
         
+        x_axis_data = mySeriesGrupBy.index.astype(str)
+        y_axis_data = mySeriesGrupBy.values
+
         match graphicType:
             case '1': 
-                mydtVi.plotTopObjs(x, mySeriesGrupBy.values, 'a', 'b')
+                mydtVi.plotTopObjs(x_axis_data, y_axis_data, xAxis, yAxis)
             case '2':
-                mydtVi.plotLineObjs(x, mySeriesGrupBy.values, 'a', 'b')
-                
-        
-        
-        
+                mydtVi.plotLineObjs(x_axis_data, y_axis_data, xAxis, yAxis)
