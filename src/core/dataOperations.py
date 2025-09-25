@@ -23,21 +23,24 @@ class dataOperations:
 
         return self.dataFrame
     
-    def printColumnsNames(self, removeItem : str = None): 
-        
+    def printColumnsNames(self, removeItem: str = None):
         print("| Colunas Disponíveis:\n|")
-        
-        colunas = self.dataFrame.columns
-        colunas = np.array(colunas.astype(str))
-        
-        if (removeItem != None):
-            indexToRemove = np.where(colunas == removeItem)
-            colunas = np.delete(colunas, indexToRemove)
-        
-        for index, nome_coluna in enumerate(colunas):
-            finalIndex = index + 1
-            print(f"| [ {finalIndex} ] - {nome_coluna}")
-            
+
+        colunas = list(self.dataFrame.columns)
+        colunas_datatype = list(self.dataFrame.dtypes)
+
+        if removeItem is not None:
+            try:
+                index_to_remove = colunas.index(removeItem)
+                colunas.pop(index_to_remove)
+                colunas_datatype.pop(index_to_remove)
+            except ValueError:
+                print(f"| Aviso: Coluna '{removeItem}' não encontrada.")
+
+        for index, (nome_coluna, tipo_coluna) in enumerate(zip(colunas, colunas_datatype)):
+            final_index = index + 1
+            print(f"| [ {final_index} ] - {nome_coluna} ({tipo_coluna})")
+
         return len(colunas)
 
     def selectColumns(self, removeItem : str = None):
@@ -78,11 +81,18 @@ class dataOperations:
         
         print(f"\n| Seleção: Agrupar por '{xAxis}' e analisar '{yAxis}'")
         mySeriesGrupBy = mydtPr.getTopProdutos(self.dataFrame, xAxis, yAxis, 5)
-        
-        print(mySeriesGrupBy)
-        
+                
         x = mySeriesGrupBy.astype(str).sort_index()
         
-        mydtVi.plotTopObjs(x, mySeriesGrupBy.values, 'a', 'b')
+        print("\n| SELECIONAR O TIPO DO GRÁFICO \n")
+        graphicType = str(input("| Escolha 1 ou 2"))
+        
+        match graphicType:
+            case '1': 
+                mydtVi.plotTopObjs(x, mySeriesGrupBy.values, 'a', 'b')
+            case '2':
+                mydtVi.plotLineObjs(x, mySeriesGrupBy.values, 'a', 'b')
+                
+        
         
         
